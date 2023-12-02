@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace Day1
+﻿namespace Day1
 {
     internal class Program
     {
@@ -15,12 +13,12 @@ namespace Day1
                 ).Sum();
 
             Console.WriteLine($"Part 1: {sum}"); // 54605
-            Console.ReadKey();
+            Console.ReadLine();
 
             sum = rawData.Sum(s => LineSum(GetChars(s)));
 
             Console.WriteLine($"Part 2: {sum}");
-            Console.ReadKey();
+            Console.ReadLine();
         }
 
         private static char[] GetChars(string s)
@@ -36,10 +34,11 @@ namespace Day1
                     continue;
                 }
 
-                if (HasAny(s.AsSpan(i), out string n, out char r))
+                if (HasAny(s.AsSpan(i).ToString(), out int n, out char r))
                 {
                     arr.Add(r);
-                    i += n.Length;
+                    //i += n;
+                    i++;
                     continue;
                 }
 
@@ -56,22 +55,17 @@ namespace Day1
             return int.Parse(new string(new[] { first, last }));
         }
 
-        private static bool HasAny(ReadOnlySpan<char> chars, out string number, out char r)
+        private static bool HasAny(string chars, out int charCount, out char r)
         {
             foreach (var n in numbers)
             {
-                if (chars.StartsWith(n))
-                {
-                    if (Enum.TryParse(n, out Map result))
-                    {
-                        r = char.Parse(((int)result).ToString());
-                        number = n;
-                        return true;
-                    }
-                }
+                if (!chars.StartsWith(n, StringComparison.InvariantCultureIgnoreCase)) continue;
+                r = Map(n);
+                charCount = n.Length;
+                return true;
             }
 
-            number = string.Empty;
+            charCount = 0;
             r = '0';
             return false;
         }
@@ -89,17 +83,21 @@ namespace Day1
 
         private static readonly string[] numbers = { "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
 
-        private enum Map : int
+        private static char Map (string n)
         {
-            one = 1,
-            two = 2,
-            three = 3,
-            four = 4,
-            five = 5,
-            six = 6,
-            seven = 7,
-            eight = 8,
-            nine = 9
+            return n switch
+            {
+                "one" => '1',
+                "two" => '2',
+                "three" => '3',
+                "four" => '4',
+                "five" => '5',
+                "six" => '6',
+                "seven" => '7',
+                "eight" => '8',
+                "nine" => '9',
+                _ => throw new NotImplementedException(),
+            };
         }
     }
 }
