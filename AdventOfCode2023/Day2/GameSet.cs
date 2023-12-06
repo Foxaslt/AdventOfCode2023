@@ -1,5 +1,4 @@
-﻿
-namespace Day2
+﻿namespace Day2
 {
     internal class GameSet
     {
