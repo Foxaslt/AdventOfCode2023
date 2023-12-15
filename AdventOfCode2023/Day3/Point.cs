@@ -1,8 +1,10 @@
 ﻿namespace Day3
 {
-    internal class Point
+    internal class Point(int x, int y)
     {
-        public int x; public int y;
+        List<int> top = new List<int>();
+        List<int> mid = new List<int>();
+        List<int> bottom = new List<int>();
 
         internal decimal GetSum(string[] rawData)
         {
@@ -37,30 +39,18 @@
                 return chars.Count == 0 ? 0 : int.Parse(new string(chars.ToArray()));
             }
 
-            List<char> charsLeft = new List<char>();
-            List<char> charsRight = new List<char>();
+            int bottomLeft = 0; int bottomRight = 0;
             if (char.IsNumber(rawData[x + 1][y - 1]))
             {
-                int i = y - 1;
-                while (i > 0 && char.IsNumber(rawData[x + 1][i]))
-                {
-                    charsLeft.Insert(0, rawData[x + 1][i]);
-                    i--;
-                }
+                bottomLeft = GetBottomLeft(rawData);
             }
 
             if (char.IsNumber(rawData[x + 1][y + 1]))
             {
-                int i = y + 1;
-                while (i < rawData[x + 1].Length && char.IsNumber(rawData[x + 1][i]))
-                {
-                    charsRight.Add(rawData[x + 1][i]);
-                    i++;
-                }
+                bottomRight = GetBottomRight(rawData);
             }
 
-            return (charsLeft.Count == 0 ? 0 : int.Parse(new string(charsLeft.ToArray()))) +
-                (charsRight.Count == 0 ? 0 : int.Parse(new string(charsRight.ToArray())));
+            return bottomLeft + bottomRight;
         }
 
         private int GetTop(string[] rawData)
@@ -86,30 +76,32 @@
                 return chars.Count == 0 ? 0 : int.Parse(new string(chars.ToArray()));
             }
 
-            List<char> charsLeft = new List<char>();
-            List<char> charsRight = new List<char>();
+            int topLeft = 0; int topRight = 0;
             if (char.IsNumber(rawData[x - 1][y - 1]))
             {
-                int i = y - 1;
-                while (i > 0 && char.IsNumber(rawData[x - 1][i]))
-                {
-                    charsLeft.Insert(0, rawData[x - 1][i]);
-                    i--;
-                }
+                topLeft = GetTopLeft(rawData);
             }
 
             if (char.IsNumber(rawData[x - 1][y + 1]))
             {
-                int i = y + 1;
-                while (i < rawData[x - 1].Length && char.IsNumber(rawData[x - 1][i]))
-                {
-                    charsRight.Add(rawData[x - 1][i]);
-                    i++;
-                }
+                topRight = GetTopRight(rawData);
             }
 
-            return (charsLeft.Count == 0 ? 0 : int.Parse(new string(charsLeft.ToArray()))) +
-                (charsRight.Count == 0 ? 0 : int.Parse(new string(charsRight.ToArray())));
+            return topLeft + topRight;
+        }
+
+        private int GetTopRight(string[] rawData)
+        {
+            List<char> charsRight = new List<char>();
+            int i = y + 1;
+            while (i < rawData[x - 1].Length && char.IsNumber(rawData[x - 1][i]))
+            {
+                charsRight.Add(rawData[x - 1][i]);
+                i++;
+            }
+
+            var topRight = charsRight.Count == 0 ? 0 : int.Parse(new string(charsRight.ToArray()));
+            return topRight;
         }
 
         private int GetRight(string[] rawData)
@@ -125,6 +117,34 @@
             return chars.Count == 0 ? 0 : int.Parse(new string(chars.ToArray()));
         }
 
+        private int GetTopLeft(string[] rawData)
+        {
+            List<char> charsLeft = new List<char>();
+            int i = y - 1;
+            while (i > 0 && char.IsNumber(rawData[x - 1][i]))
+            {
+                charsLeft.Insert(0, rawData[x - 1][i]);
+                i--;
+            }
+
+            var topLeft = charsLeft.Count == 0 ? 0 : int.Parse(new string(charsLeft.ToArray()));
+            return topLeft;
+        }
+
+        private int GetBottomRight(string[] rawData)
+        {
+            List<char> charsRight = new List<char>();
+            int i = y + 1;
+            while (i < rawData[x + 1].Length && char.IsNumber(rawData[x + 1][i]))
+            {
+                charsRight.Add(rawData[x + 1][i]);
+                i++;
+            }
+
+            var bottomRight = charsRight.Count == 0 ? 0 : int.Parse(new string(charsRight.ToArray()));
+            return bottomRight;
+        }
+
         private int GetLeft(string[] rawData)
         {
             List<char> chars = new List<char>();
@@ -137,5 +157,32 @@
 
             return chars.Count == 0 ? 0 : int.Parse(new string(chars.ToArray()));
         }
+
+        private int GetBottomLeft(string[] rawData)
+        {
+            List<char> charsLeft = new List<char>();
+            int i = y - 1;
+            while (i > 0 && char.IsNumber(rawData[x + 1][i]))
+            {
+                charsLeft.Insert(0, rawData[x + 1][i]);
+                i--;
+            }
+
+            var bottomLeft = charsLeft.Count == 0 ? 0 : int.Parse(new string(charsLeft.ToArray()));
+            return bottomLeft;
+        }
+
+        public bool IsGear(string[] rawData)
+        {
+            mid.Add(GetLeft(rawData));
+            mid.Add(GetRight(rawData));
+
+            return top.Count + mid.Count + bottom.Count == 2;
+        }
+
+        //public int GetMultiply(string[] rawData)
+        //{
+        //    var top.Join()
+        //}
     }
 }

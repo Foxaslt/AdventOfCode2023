@@ -13,12 +13,12 @@
                 {
                     if (!char.IsNumber(rawData[i][j]) && rawData[i][j] != '.')
                     {
-                        points.Add(new Point() { x = i, y = j });
+                        points.Add(new Point(i, j));
                     }
                 }
             }
 
-            var sum = points.Sum(point => point.GetSum(rawData));
+            var sum = points.Sum(point => point.GetSum(rawData)); // 520019
             Console.WriteLine($"Part 1: {sum}");
             Console.ReadLine();
 
@@ -27,30 +27,16 @@
             {
                 for (int j = 0; j < rawData[i].Length; j++)
                 {
-                    if (rawData[i][j] == '*' && IsGear(rawData, i, j))
+                    if (rawData[i][j] == '*')
                     {
-                        points.Add(new Point() { x = i, y = j });
+                        points.Add(new Point(i, j));
                     }
                 }
             }
+
+            //var sum = points.Where(point => point.IsGear(rawData)).Sum(point => point.GetMultiply(rawData));
             Console.WriteLine($"Part 2: {sum}");
             Console.ReadLine();
-        }
-
-        private static bool IsGear(string[] rawData, int i, int j)
-        {
-            int count = 0;
-
-            for (int z = 0; z < 3; z++)
-            {
-                for (int k = 0; k < 3; k++)
-                {
-                   
-                }
-            }
-
-            if (count == 2) return true;
-            return false;
         }
     }
 }
