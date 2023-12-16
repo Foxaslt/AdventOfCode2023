@@ -8,15 +8,37 @@
 
         internal decimal GetSum(string[] rawData)
         {
-            int leftNumber = GetLeft(rawData);
-            int rightNumber = GetRight(rawData);
-            int topNumber = GetTop(rawData);
-            int bottomNumber = GetBottom(rawData);
+            var leftNumber = GetLeft(rawData);
+            var rightNumber = GetRight(rawData);
+            int topNumber = GetTopSum(rawData);
+            int bottomNumber = GetBottomSum(rawData);
 
-            return leftNumber + rightNumber + topNumber + bottomNumber;
+            return (leftNumber ?? 0) + (rightNumber ?? 0) + topNumber + bottomNumber;
         }
 
-        private int GetBottom(string[] rawData)
+        private int GetBottomSum(string[] rawData)
+        {
+            int result = 0;
+            foreach (var i in GetBottomAsList(rawData))
+            {
+                result += i;
+            }
+
+            return result;
+        }
+
+        private int GetTopSum(string[] rawData)
+        {
+            int result = 0;
+            foreach (var i in GetTopAsList(rawData))
+            {
+                result += i;
+            }
+
+            return result;
+        }
+
+        private List<int> GetBottomAsList(string[] rawData)
         {
             if (char.IsNumber(rawData[x + 1][y]))
             {
@@ -36,7 +58,7 @@
                     i--;
                 }
 
-                return chars.Count == 0 ? 0 : int.Parse(new string(chars.ToArray()));
+                return chars.Count == 0 ? new List<int>() : new List<int>() { int.Parse(new string(chars.ToArray())) };
             }
 
             int bottomLeft = 0; int bottomRight = 0;
@@ -50,10 +72,14 @@
                 bottomRight = GetBottomRight(rawData);
             }
 
-            return bottomLeft + bottomRight;
+            var list = new List<int>();
+            if (bottomLeft != 0) { list.Add(bottomLeft); }
+            if (bottomRight != 0) { list.Add(bottomRight); }
+
+            return list;
         }
 
-        private int GetTop(string[] rawData)
+        private List<int> GetTopAsList(string[] rawData)
         {
             if (char.IsNumber(rawData[x - 1][y]))
             {
@@ -73,7 +99,7 @@
                     i--;
                 }
 
-                return chars.Count == 0 ? 0 : int.Parse(new string(chars.ToArray()));
+                return chars.Count == 0 ? new List<int>() : new List<int>() { int.Parse(new string(chars.ToArray())) };
             }
 
             int topLeft = 0; int topRight = 0;
@@ -87,7 +113,11 @@
                 topRight = GetTopRight(rawData);
             }
 
-            return topLeft + topRight;
+            var list = new List<int>();
+            if (topLeft != 0) { list.Add(topLeft); }
+            if (topRight != 0) { list.Add(topRight); }
+
+            return list;
         }
 
         private int GetTopRight(string[] rawData)
@@ -104,7 +134,7 @@
             return topRight;
         }
 
-        private int GetRight(string[] rawData)
+        private int? GetRight(string[] rawData)
         {
             List<char> chars = new List<char>();
             int i = y + 1;
@@ -114,7 +144,7 @@
                 i++;
             }
 
-            return chars.Count == 0 ? 0 : int.Parse(new string(chars.ToArray()));
+            return chars.Count == 0 ? null : int.Parse(new string(chars.ToArray()));
         }
 
         private int GetTopLeft(string[] rawData)
@@ -145,7 +175,7 @@
             return bottomRight;
         }
 
-        private int GetLeft(string[] rawData)
+        private int? GetLeft(string[] rawData)
         {
             List<char> chars = new List<char>();
             int i = y - 1;
@@ -155,7 +185,7 @@
                 i--;
             }
 
-            return chars.Count == 0 ? 0 : int.Parse(new string(chars.ToArray()));
+            return chars.Count == 0 ? null : int.Parse(new string(chars.ToArray()));
         }
 
         private int GetBottomLeft(string[] rawData)
@@ -174,15 +204,20 @@
 
         public bool IsGear(string[] rawData)
         {
-            mid.Add(GetLeft(rawData));
-            mid.Add(GetRight(rawData));
+            top.AddRange(GetTopAsList(rawData));
+            var leftMid = GetLeft(rawData);
+            if (leftMid != null) mid.Add(leftMid.Value);
+            var rightMid = GetRight(rawData);
+            if (rightMid != null) mid.Add(rightMid.Value);
+            bottom.AddRange(GetBottomAsList(rawData));
 
             return top.Count + mid.Count + bottom.Count == 2;
         }
 
-        //public int GetMultiply(string[] rawData)
-        //{
-        //    var top.Join()
-        //}
+        public int GetMultiply(string[] rawData)
+        {
+            var x = top.Concat(mid).Concat(bottom);
+            return x.Aggregate((a, y) => a * y);
+        }
     }
 }

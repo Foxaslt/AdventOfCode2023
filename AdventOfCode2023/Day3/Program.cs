@@ -34,7 +34,7 @@
                 }
             }
 
-            //var sum = points.Where(point => point.IsGear(rawData)).Sum(point => point.GetMultiply(rawData));
+            sum = points.Where(point => point.IsGear(rawData)).Sum(point => point.GetMultiply(rawData));
             Console.WriteLine($"Part 2: {sum}");
             Console.ReadLine();
         }
