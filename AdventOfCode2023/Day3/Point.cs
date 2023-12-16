@@ -18,69 +18,42 @@
 
         private int GetBottomSum(string[] rawData)
         {
-            int result = 0;
-            foreach (var i in GetBottomAsList(rawData))
-            {
-                result += i;
-            }
-
-            return result;
+            return GetBottomAsList(rawData).Sum();
         }
 
         private int GetTopSum(string[] rawData)
         {
-            int result = 0;
-            foreach (var i in GetTopAsList(rawData))
-            {
-                result += i;
-            }
-
-            return result;
+            return GetTopAsList(rawData).Sum();
         }
 
         private int[] GetBottomAsList(string[] rawData)
         {
-            if (char.IsNumber(rawData[x + 1][y]))
-            {
-                int z = x + 1;
-                return GetSingleNumber(rawData, z);
-            }
-
-            int? bottomLeft = null; int? bottomRight = null;
-            if (char.IsNumber(rawData[x + 1][y - 1]))
-            {
-                bottomLeft = GetBottomLeft(rawData);
-            }
-
-            if (char.IsNumber(rawData[x + 1][y + 1]))
-            {
-                bottomRight = GetBottomRight(rawData);
-            }
-
-            var list = new List<int>();
-            if (bottomLeft.HasValue) { list.Add(bottomLeft.Value); }
-            if (bottomRight.HasValue) { list.Add(bottomRight.Value); }
-
-            return list.ToArray();
+            int z = x + 1;
+            return GetNumbers(rawData, z);
         }
 
         private int[] GetTopAsList(string[] rawData)
         {
-            if (char.IsNumber(rawData[x - 1][y]))
+            int z = x - 1;
+            return GetNumbers(rawData, z);
+        }
+
+        private int[] GetNumbers(string[] rawData, int z)
+        {
+            if (char.IsNumber(rawData[z][y]))
             {
-                int z = x - 1;
                 return GetSingleNumber(rawData, z);
             }
 
             int? topLeft = null; int? topRight = null;
-            if (char.IsNumber(rawData[x - 1][y - 1]))
+            if (char.IsNumber(rawData[z][y - 1]))
             {
-                topLeft = GetTopLeft(rawData);
+                topLeft = Left(rawData, z);
             }
 
-            if (char.IsNumber(rawData[x - 1][y + 1]))
+            if (char.IsNumber(rawData[z][y + 1]))
             {
-                topRight = GetTopRight(rawData);
+                topRight = Right(rawData, z);
             }
 
             var list = new List<int>();
@@ -111,21 +84,9 @@
             return chars.Count == 0 ? Array.Empty<int>() : new int[] { int.Parse(new string(chars.ToArray())) };
         }
 
-        private int? GetTopRight(string[] rawData)
-        {
-            int z = x - 1;
-            return Right(rawData, z);
-        }
-
         private int? GetRight(string[] rawData)
         {
             int z = x;
-            return Right(rawData, z);
-        }
-
-        private int? GetBottomRight(string[] rawData)
-        {
-            int z = x + 1;
             return Right(rawData, z);
         }
 
@@ -142,21 +103,9 @@
             return charsRight.Count == 0 ? null : int.Parse(new string(charsRight.ToArray()));
         }
 
-        private int? GetTopLeft(string[] rawData)
-        {
-            int z = x - 1;
-            return Left(rawData, z);
-        }
-
         private int? GetLeft(string[] rawData)
         {
             int z = x;
-            return Left(rawData, z);
-        }
-
-        private int? GetBottomLeft(string[] rawData)
-        {
-            int z = x + 1;
             return Left(rawData, z);
         }
 
