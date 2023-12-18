@@ -1,10 +1,13 @@
-﻿namespace Day4
+﻿using System.Collections.ObjectModel;
+
+namespace Day4
 {
     internal class Card
     {
         private string name;
         List<int> winning = new List<int>();
         List<int> myNumbers = new List<int>();
+        List<Card> cards = new List<Card>();
 
         public Card(string s)
         {
@@ -31,6 +34,25 @@
                 points *= 2;
             }
             return points;
+        }
+
+        internal void BuildTree(ref ReadOnlyCollection<Card> readonlyList)
+        {
+            var numbers = myNumbers.Intersect(winning).ToArray();
+            var index = readonlyList.IndexOf(this) + 1;
+            var winningCards = readonlyList.Skip(index).Take(numbers.Length).ToArray();
+            cards.AddRange(winningCards);
+            foreach (var winningCard in winningCards)
+            {
+                winningCard.BuildTree(ref readonlyList);
+            }
+        }
+
+        internal int GetCount()
+        {
+            var count = cards.Sum(card => card.GetCount());
+
+            return 1 + count;
         }
     }
 }
