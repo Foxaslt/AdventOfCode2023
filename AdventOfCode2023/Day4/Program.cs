@@ -8,7 +8,8 @@
 
             List<Card> cards = rawData.Select(s => new Card(s)).ToList();
 
-            //Console.WriteLine($"Part 1: {sum}");
+            var sum = cards.Sum(c => c.GetSum());
+            Console.WriteLine($"Part 1: {sum}");
             Console.ReadLine();
         }
     }

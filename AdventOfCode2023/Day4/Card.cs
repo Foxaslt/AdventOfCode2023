@@ -16,5 +16,21 @@
             myNumbers.AddRange(numbers[1].Trim().Split(' ').Where(n => !string.IsNullOrEmpty(n)).Select(int.Parse));
         }
 
+        internal int GetSum()
+        {
+            var numbers = myNumbers.Intersect(winning).ToArray();
+            int points = 0;
+            for (int i = 0; i < numbers.Length; i++)
+            {
+                if (i == 0)
+                {
+                    points = 1;
+                    continue;
+                }
+
+                points *= 2;
+            }
+            return points;
+        }
     }
 }
